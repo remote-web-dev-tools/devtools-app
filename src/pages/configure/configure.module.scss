@@ -1,0 +1,23 @@
+.header {
+  display: flex;
+  margin-bottom: 36px;
+}
+
+.content {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+}
+
+.form {
+  width: 400px;
+}
+
+.buttonItem {
+  display: flex;
+  margin-top: 24px;
+  justify-content: flex-end;
+}
