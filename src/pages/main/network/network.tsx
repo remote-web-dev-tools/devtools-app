@@ -1,15 +1,15 @@
 import React from 'react';
 
-export interface ConsoleProps {}
+export interface NetworkProps {}
 
-export default function Console(props: ConsoleProps) {
+export default function Network(props: NetworkProps) {
   return (
     <div
       style={{
         height: '100%',
       }}
     >
-      Console Work
+      Network Work
     </div>
   );
 }

@@ -1,14 +1,13 @@
-import React from 'react';
-
 import { AppBar, Button, makeStyles, Menu, MenuItem, Tab, Tabs, Toolbar, Typography } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import React from 'react';
+import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+
+import Console from './console/console';
+import EventTracking from './event-tracking/event-tracking';
+import Network from './network/network';
 
 import { useClientIds } from './main.hooks';
-import { Redirect, Route, Switch } from 'react-router-dom';
-import { Router } from '@material-ui/icons';
-import Configure from '../configure/configure';
-import { configureContext } from '../../App';
-import Console from './console/console';
 
 const useStyles = makeStyles({
   main: {
@@ -23,6 +22,7 @@ const useStyles = makeStyles({
   container: {
     display: 'flex',
     flexGrow: 1,
+    flexDirection: 'column',
   },
 });
 
@@ -33,26 +33,29 @@ const routes = [
     disabled: false,
     component: Console,
   },
+  {
+    path: '/network',
+    tabTitle: 'network',
+    disabled: true,
+    component: Network,
+  },
+  {
+    path: '/event-tracking',
+    tabTitle: 'Event Tracking',
+    disabled: true,
+    component: EventTracking,
+  },
 ];
 
 const Main = () => {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [tabIndex, setTabIndex] = React.useState(0);
-
-  const handleChangeTab = (event: React.ChangeEvent<{}>, newValue: number) => {
-    setTabIndex(newValue);
-  };
+  const { path, url } = useRouteMatch();
+  const history = useHistory();
 
   const { serverId, clientIds, selectedClientId, setSelectedClientId } = useClientIds();
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [tabIndex, setTabIndex] = React.useState(0);
 
   return (
     <div className={classes.main}>
@@ -62,7 +65,14 @@ const Main = () => {
             Remote Dev Tools
           </Typography>
 
-          <Button aria-haspopup="true" size={'large'} onClick={handleClick} style={{ color: '#fff' }}>
+          <Button
+            aria-haspopup="true"
+            size={'large'}
+            onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+              setAnchorEl(event.currentTarget);
+            }}
+            style={{ color: '#fff' }}
+          >
             {selectedClientId ? (
               <>
                 {selectedClientId} <ArrowDropDownIcon style={{ marginLeft: 8 }} />
@@ -71,13 +81,21 @@ const Main = () => {
               'No Client'
             )}
           </Button>
-          <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={() => {
+              setAnchorEl(null);
+            }}
+          >
             {clientIds.map((value, index) => (
               <MenuItem
                 key={index}
                 onClick={() => {
                   setSelectedClientId(value);
-                  handleClose();
+                  setAnchorEl(null);
                 }}
               >
                 {value}
@@ -88,20 +106,32 @@ const Main = () => {
       </AppBar>
 
       <div className={classes.container}>
-        <Tabs value={tabIndex} textColor="primary" onChange={handleChangeTab}>
-          {routes.map((route) => (
-            <Tab label={route.tabTitle.toUpperCase()} disabled={route.disabled} />
+        <Tabs
+          value={tabIndex}
+          textColor="primary"
+          indicatorColor={'primary'}
+          onChange={(event: React.ChangeEvent<{}>, newValue: number) => {
+            setTabIndex(newValue);
+          }}
+        >
+          {routes.map(({ disabled, path: componentPath, tabTitle }, index) => (
+            <Tab
+              key={index}
+              component={'a'}
+              onClick={(event) => {
+                event.preventDefault();
+                history.push(`${url}${componentPath}`);
+              }}
+              label={tabTitle.toUpperCase()}
+              disabled={disabled}
+            />
           ))}
         </Tabs>
 
         <Switch>
-          <Router>
-            <Switch>
-              {routes.map((route) => (
-                <Route path={'/main' + route.path} component={route.component} />
-              ))}
-            </Switch>
-          </Router>
+          {routes.map(({ component, path: componentPath }, index) => (
+            <Route key={index} exact path={`${path}${componentPath}`} component={component} />
+          ))}
         </Switch>
       </div>
     </div>

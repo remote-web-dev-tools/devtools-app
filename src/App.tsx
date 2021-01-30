@@ -20,11 +20,12 @@ function App() {
     <configureContext.Provider value={{ saveConfigure, configure }}>
       <Router>
         <Switch>
-          <Route path="/" exact>
-            {needConfigure ? <Redirect to="/configure" /> : <Main />}
-          </Route>
-          <Route path="/configure">
+          <Route path="/main">{needConfigure ? <Redirect to="/configure" /> : <Main />}</Route>
+          <Route path="/configure" exact>
             <Configure />
+          </Route>
+          <Route path="/" exact>
+            <Redirect to="/main" />
           </Route>
         </Switch>
       </Router>
