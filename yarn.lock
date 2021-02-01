@@ -1663,6 +1663,20 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
+"@rwdt/js-value-view@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@rwdt/js-value-view/-/js-value-view-0.0.2.tgz#9ff20f0af0c401e4fc4056e07b2ddc4f168b6632"
+  integrity sha512-of7jz6GX0ycfbbXLaKDVQtTql8Nc4De/Ho8SWE9GaZl6jkEXroDACY5rnhoslymUb2Pm5WhBIzX1CS3TVS1omQ==
+  dependencies:
+    classnames "^2.2.6"
+    react "^17.0.1"
+    react-dom "^17.0.1"
+
+"@rwdt/logger@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@rwdt/logger/-/logger-1.0.0.tgz#98b95e07f98fc33a4cca1459b9a7ff933c0a1b8d"
+  integrity sha512-i9P00ALwENLJdxiTtVoNyrlUeEEGwowWaqAFFpxuOA90JgNmhghh6w9wrxcKVUKFccA6mz63PudtGzBsRWx7Hw==
+
 "@sinonjs/commons@^1.7.0":
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.8.1.tgz#e7df00f98a203324f6dc7cc606cad9d4a8ab2217"

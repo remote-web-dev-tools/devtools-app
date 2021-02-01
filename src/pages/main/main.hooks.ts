@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ClientId, ServerId } from '../../interfaces/transfer-id.interface';
 import { request } from '../../utils/request';
+import { Log } from '../../interfaces/log.interface';
+import { LoggingEvent } from '@rwdt/logger';
 
 const fetchClientIds = (): Promise<{ serverId: string; data: ClientId[] }> => {
   if (process.env.NODE_ENV === 'development') {
@@ -30,4 +32,66 @@ export const useClientIds = () => {
   }, []);
 
   return { clientIds, serverId, selectedClientId, setSelectedClientId };
+};
+
+const MAX_LOG_LENGTH = 5000;
+
+const appendData = <T>(preState: T[], newData: T[]): T[] => {
+  newData = [...preState].concat(newData);
+
+  if (newData.length <= MAX_LOG_LENGTH) {
+    return newData;
+  } else {
+    return newData.slice(newData.length - MAX_LOG_LENGTH, newData.length);
+  }
+};
+
+const fetchRemoteData = (serverId: ServerId, clientId: ClientId): Promise<LoggingEvent[]> => {
+  return Promise.resolve([{ level: 'DEBUG', data: 1, date: new Date(), context: { type: 'console' } }]);
+};
+
+export const useFetchData = (serverId: ServerId, clientId: ClientId) => {
+  const [logs, setLogs] = React.useState<Log[]>([]);
+
+  const timerRef = React.useRef<NodeJS.Timeout>();
+
+  const timeFn = React.useCallback(() => {
+    fetchRemoteData(serverId, clientId)
+      .then((loggingEvents) => {
+        setLogs((prevState) => appendData(prevState, loggingEvents));
+      })
+      .finally(() => {
+        timerRef.current = setTimeout(() => {
+          timeFn();
+        }, 1000);
+      });
+  }, [serverId, clientId]);
+
+  useEffect(() => {
+    if (!(serverId && clientId)) {
+      return;
+    }
+
+    timeFn();
+
+    /* 清理定时器资源 */
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [serverId, clientId, timeFn]);
+
+  useEffect(() => {
+    /* TODO: 处理切换 client */
+  }, [clientId]);
+
+  const clearLogs = React.useCallback(() => {
+    setLogs([]);
+  }, []);
+
+  return {
+    logs,
+    clearLogs,
+  };
 };

@@ -5,6 +5,8 @@
   "dependencies": {
     "@material-ui/core": "^4.11.2",
     "@material-ui/icons": "^4.11.2",
+    "@rwdt/js-value-view": "^0.0.2",
+    "@rwdt/logger": "^1.0.0",
     "classnames": "^2.2.6",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

@@ -1,13 +1,13 @@
 import { AppBar, Button, makeStyles, Menu, MenuItem, Tab, Tabs, Toolbar, Typography } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import React from 'react';
-import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+import { Redirect, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Console from './console/console';
 import EventTracking from './event-tracking/event-tracking';
 import Network from './network/network';
 
-import { useClientIds } from './main.hooks';
+import { useClientIds, useFetchData } from './main.hooks';
 
 const useStyles = makeStyles({
   main: {
@@ -31,19 +31,16 @@ const routes = [
     path: '/console',
     tabTitle: 'console',
     disabled: false,
-    component: Console,
   },
   {
     path: '/network',
     tabTitle: 'network',
     disabled: true,
-    component: Network,
   },
   {
     path: '/event-tracking',
     tabTitle: 'Event Tracking',
     disabled: true,
-    component: EventTracking,
   },
 ];
 
@@ -53,6 +50,7 @@ const Main = () => {
   const history = useHistory();
 
   const { serverId, clientIds, selectedClientId, setSelectedClientId } = useClientIds();
+  const { logs, clearLogs } = useFetchData(serverId, selectedClientId);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [tabIndex, setTabIndex] = React.useState(0);
@@ -129,9 +127,24 @@ const Main = () => {
         </Tabs>
 
         <Switch>
-          {routes.map(({ component, path: componentPath }, index) => (
-            <Route key={index} exact path={`${path}${componentPath}`} component={component} />
-          ))}
+          <Route exact path={path}>
+            <Redirect to={`${path}/console`} />
+          </Route>
+
+          {/* Console panel */}
+          <Route exact path={`${path}/console`}>
+            <Console logs={logs} onClear={clearLogs} />
+          </Route>
+
+          {/* Network panel */}
+          <Route exact path={`${path}/network`}>
+            <Network />
+          </Route>
+
+          {/* EventTracking panel */}
+          <Route exact path={`${path}/event-tracking`}>
+            <EventTracking />
+          </Route>
         </Switch>
       </div>
     </div>

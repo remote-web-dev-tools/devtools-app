@@ -1,9 +1,9 @@
-import { Container, FormControl } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useForm, Controller } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 
 import { configureContext } from '../../App';
 import styles from './configure.module.scss';
