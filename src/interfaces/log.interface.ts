@@ -1,7 +1,8 @@
 import { LoggerLevel } from '@rwdt/logger';
 
 export interface Log {
-  data: any;
+  data: any[];
   date: Date;
   level: LoggerLevel;
+  key: number;
 }
