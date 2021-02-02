@@ -5,7 +5,7 @@ import { LoggerLevel } from '@rwdt/logger';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
-type SupportLoggerLevel = Exclude<LoggerLevel, 'ALL' | 'OFF'>;
+export type SupportLoggerLevel = Exclude<LoggerLevel, 'ALL' | 'OFF'>;
 
 export interface ConsoleFilter {
   showLogLevel: SupportLoggerLevel[];

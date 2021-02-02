@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { ClientId, ServerId } from '../../interfaces/transfer-id.interface';
 import { request } from '../../utils/request';
-import { Log } from '../../interfaces/log.interface';
+import { Log } from './console/log.interface';
 import { LoggingEvent } from '@rwdt/logger';
 
 const fetchClientIds = (): Promise<{ serverId: string; data: ClientId[] }> => {

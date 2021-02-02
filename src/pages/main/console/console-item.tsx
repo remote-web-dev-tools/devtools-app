@@ -1,8 +1,14 @@
 import React from 'react';
-import { Log } from '../../../interfaces/log.interface';
+import { Log } from './log.interface';
 import dayjs from 'dayjs';
 import JsValueView from '@rwdt/js-value-view';
 import { makeStyles } from '@material-ui/core';
+import { ConsoleFilter } from './console-tool-bar';
+
+export interface ConsoleItemProps {
+  log: Log;
+  filter: ConsoleFilter;
+}
 
 const useStyles = makeStyles(({ palette }) => {
   return {
@@ -61,17 +67,19 @@ const useStyles = makeStyles(({ palette }) => {
 });
 
 const ConsoleItem = React.memo(
-  ({ log }: { log: Log }) => {
+  ({ log, filter: { showTimestamps } }: ConsoleItemProps) => {
     const styles = useStyles();
 
     return (
       <div className={styles.item}>
-        {/* 日志时间 */}
-        <div className={styles.logTime}>
-          <span>{dayjs(log.date).format('hh:mm:ss.SSS')}</span>
-        </div>
+        {/* log date */}
+        {showTimestamps ? (
+          <div className={styles.logTime}>
+            <span>{dayjs(log.date).format('hh:mm:ss.SSS')}</span>
+          </div>
+        ) : null}
 
-        {/* 日志登记 */}
+        {/* logger level */}
         <div className={styles.logLevel}>
           <div className={`${styles.logLevelTag} ${log.level.toLowerCase()}`}>{log.level}</div>
         </div>
@@ -84,7 +92,12 @@ const ConsoleItem = React.memo(
       </div>
     );
   },
-  () => true
+  (prev, next) => {
+    const { filter: preFilter } = prev;
+    const { filter: nextFilter } = next;
+
+    return preFilter.showTimestamps === nextFilter.showTimestamps;
+  }
 );
 
 export default ConsoleItem;

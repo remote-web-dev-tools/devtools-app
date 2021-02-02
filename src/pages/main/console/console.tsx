@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Log } from '../../../interfaces/log.interface';
+import { Log } from './log.interface';
 import ConsoleItem from './console-item';
-import ConsoleToolBar, { ConsoleFilter } from './console-tool-bar';
+import ConsoleToolBar, { ConsoleFilter, SupportLoggerLevel } from './console-tool-bar';
 
 export interface ConsoleProps {
   logs: Log[];
@@ -12,15 +12,27 @@ export interface ConsoleProps {
 const Console = React.memo(
   (props: ConsoleProps) => {
     const { logs, onClear } = props;
+
+    const [showLogs, setShowLogs] = React.useState<Log[]>([]);
+
     const [filter, setFilter] = React.useState<ConsoleFilter>({
       showLogLevel: ['INFO', 'WARN', 'ERROR'],
       showTimestamps: true,
     });
 
     const handleChangeFilter = (filter: ConsoleFilter) => {
-      console.log(filter);
       setFilter(filter);
     };
+
+    React.useEffect(() => {
+      const { showLogLevel } = filter;
+      let newShowLogs: Log[] = [];
+
+      /* 1. filter logger level */
+      newShowLogs = logs.filter((value) => showLogLevel.includes(value.level as SupportLoggerLevel));
+
+      setShowLogs(newShowLogs);
+    }, [logs, filter]);
 
     return (
       <div
@@ -33,8 +45,8 @@ const Console = React.memo(
         <ConsoleToolBar filter={filter} onClear={onClear} onChangeFilter={handleChangeFilter} />
 
         {/* log content */}
-        {logs.map((log) => (
-          <ConsoleItem log={log} key={log.key} />
+        {showLogs.map((log) => (
+          <ConsoleItem filter={filter} log={log} key={log.key} />
         ))}
       </div>
     );
