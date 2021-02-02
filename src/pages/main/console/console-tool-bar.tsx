@@ -1,66 +1,88 @@
 import React from 'react';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import { Checkbox, Divider, makeStyles, Menu, MenuItem } from '@material-ui/core';
+import { Box, makeStyles, Switch, Typography, withStyles } from '@material-ui/core';
+import { LoggerLevel } from '@rwdt/logger';
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+
+type SupportLoggerLevel = Exclude<LoggerLevel, 'ALL' | 'OFF'>;
+
+export interface ConsoleFilter {
+  showLogLevel: SupportLoggerLevel[];
+  showTimestamps: boolean;
+}
+
+export interface ConsoleToolBarProps {
+  filter: ConsoleFilter;
+  onClear: () => void;
+  onChangeFilter: (filter: ConsoleFilter) => void;
+}
 
 const useStyles = makeStyles(() => {
   return {
     topBar: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
+      height: 32,
+      fontSize: 12,
       padding: '0 8px',
+    },
+    divider: {
+      width: 1,
+      height: 16,
+      backgroundColor: '#a3a3a3',
+      margin: '0 8px',
     },
   };
 });
 
-const ConsoleToolBar = React.memo(
-  () => {
-    const styles = useStyles();
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
-    const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-      setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-      setAnchorEl(null);
-    };
-
-    return (
-      <div className={styles.topBar}>
-        <DeleteForeverIcon />
-
-        <div style={{ flexGrow: 1 }} />
-
-        <div
-          style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', cursor: 'pointer' }}
-          onClick={handleClick}
-        >
-          Default levels <ArrowDropDownIcon style={{ marginLeft: 16 }} />
-        </div>
-        <Menu anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
-          <MenuItem style={{ width: 240, height: 40 }} onClick={handleClose}>
-            Default
-          </MenuItem>
-          <Divider style={{ margin: '8px 0' }} />
-          <MenuItem onClick={handleClose}>
-            <Checkbox style={{ padding: 4 }} size={'small'} color="primary" /> Debug
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <Checkbox style={{ padding: 4 }} size={'small'} color="primary" /> Info
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <Checkbox style={{ padding: 4 }} size={'small'} color="primary" /> Warn
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <Checkbox style={{ padding: 4 }} size={'small'} color="primary" /> Error
-          </MenuItem>
-        </Menu>
-      </div>
-    );
+const StyledToggleButton = withStyles({
+  root: {
+    fontSize: 'inherit',
+    lineHeight: 1,
   },
-  () => true
-);
+})(ToggleButton);
+
+const ConsoleToolBar = (props: ConsoleToolBarProps) => {
+  const styles = useStyles();
+  const { filter, onChangeFilter, onClear } = props;
+
+  return (
+    <Box display={'flex'} flexDirection={'row'} alignItems={'center'} className={styles.topBar}>
+      <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
+        <Typography style={{ marginRight: 8 }}>Show Timestamps</Typography>
+        <Switch
+          checked={filter.showTimestamps}
+          onChange={(event, checked) => {
+            onChangeFilter({
+              ...filter,
+              showTimestamps: checked,
+            });
+          }}
+          size={'small'}
+        />
+      </Box>
+      <div className={styles.divider} />
+      <Box display={'flex'} flexDirection={'row'} alignItems={'center'} flexGrow={1}>
+        <Typography style={{ marginRight: 8, marginLeft: 4 }}>Select logger level</Typography>
+
+        <ToggleButtonGroup
+          size={'small'}
+          value={filter.showLogLevel}
+          onChange={(event, showLogLevel) => {
+            onChangeFilter({
+              ...filter,
+              showLogLevel,
+            });
+          }}
+        >
+          <StyledToggleButton value={'DEBUG'}>debug</StyledToggleButton>
+          <StyledToggleButton value={'INFO'}>info</StyledToggleButton>
+          <StyledToggleButton value={'WARN'}>warn</StyledToggleButton>
+          <StyledToggleButton value={'ERROR'}>error</StyledToggleButton>
+        </ToggleButtonGroup>
+      </Box>
+      <DeleteForeverIcon style={{ cursor: 'pointer' }} onClick={onClear} />
+    </Box>
+  );
+};
 
 export default ConsoleToolBar;

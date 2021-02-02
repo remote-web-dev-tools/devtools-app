@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Log } from '../../../interfaces/log.interface';
 import ConsoleItem from './console-item';
-import ConsoleToolBar from './console-tool-bar';
+import ConsoleToolBar, { ConsoleFilter } from './console-tool-bar';
 
 export interface ConsoleProps {
   logs: Log[];
@@ -12,6 +12,15 @@ export interface ConsoleProps {
 const Console = React.memo(
   (props: ConsoleProps) => {
     const { logs, onClear } = props;
+    const [filter, setFilter] = React.useState<ConsoleFilter>({
+      showLogLevel: ['INFO', 'WARN', 'ERROR'],
+      showTimestamps: true,
+    });
+
+    const handleChangeFilter = (filter: ConsoleFilter) => {
+      console.log(filter);
+      setFilter(filter);
+    };
 
     return (
       <div
@@ -21,7 +30,7 @@ const Console = React.memo(
         }}
       >
         {/* tool bar */}
-        <ConsoleToolBar />
+        <ConsoleToolBar filter={filter} onClear={onClear} onChangeFilter={handleChangeFilter} />
 
         {/* log content */}
         {logs.map((log) => (
