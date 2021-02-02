@@ -29,7 +29,7 @@ const Console = React.memo(
       let newShowLogs: Log[] = [];
 
       /* 1. filter logger level */
-      newShowLogs = logs.filter((value) => showLogLevel.includes(value.level as SupportLoggerLevel));
+      newShowLogs = logs.filter((value) => showLogLevel.includes(value.level.toUpperCase() as SupportLoggerLevel));
 
       setShowLogs(newShowLogs);
     }, [logs, filter]);

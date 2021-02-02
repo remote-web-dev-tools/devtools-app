@@ -75,13 +75,13 @@ const ConsoleItem = React.memo(
         {/* log date */}
         {showTimestamps ? (
           <div className={styles.logTime}>
-            <span>{dayjs(log.date).format('hh:mm:ss.SSS')}</span>
+            <span>{dayjs(log.date).format('HH:mm:ss.SSS')}</span>
           </div>
         ) : null}
 
         {/* logger level */}
         <div className={styles.logLevel}>
-          <div className={`${styles.logLevelTag} ${log.level.toLowerCase()}`}>{log.level}</div>
+          <div className={`${styles.logLevelTag} ${log.level}`}>{log.level.toUpperCase()}</div>
         </div>
 
         {log.data.map((value, index) => (
