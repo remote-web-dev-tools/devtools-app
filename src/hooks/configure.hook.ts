@@ -17,6 +17,9 @@ export const useConfigure = () => {
   }, []);
 
   const saveConfigure = useCallback((configure: ConfigureInterface) => {
+    localStorage.setItem('host', configure.host);
+    localStorage.setItem('port', configure.port || '');
+
     setConfigure(configure);
     setNeedConfigure(!configure.host);
   }, []);
