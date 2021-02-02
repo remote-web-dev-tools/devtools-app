@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ConfigureInterface } from '../interfaces/configure.interface';
+import { ConfigureInterface } from '../../interfaces/configure.interface';
 
 export const useConfigure = () => {
   const [configure, setConfigure] = useState<ConfigureInterface>({ host: '' });
