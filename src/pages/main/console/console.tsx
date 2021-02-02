@@ -39,15 +39,30 @@ const Console = React.memo(
         style={{
           height: '100%',
           paddingTop: 8,
+          position: 'relative',
         }}
       >
         {/* tool bar */}
         <ConsoleToolBar filter={filter} onClear={onClear} onChangeFilter={handleChangeFilter} />
 
         {/* log content */}
-        {showLogs.map((log) => (
-          <ConsoleItem filter={filter} log={log} key={log.key} />
-        ))}
+        <div
+          style={{
+            paddingLeft: 8,
+            paddingBottom: 8,
+            position: 'absolute',
+            top: 40,
+            bottom: 0,
+            width: '100%',
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            boxSizing: 'border-box',
+          }}
+        >
+          {showLogs.map((log) => (
+            <ConsoleItem filter={filter} log={log} key={log.key} />
+          ))}
+        </div>
       </div>
     );
   },
