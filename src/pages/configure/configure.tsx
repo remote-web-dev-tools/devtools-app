@@ -5,8 +5,8 @@ import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Controller, useForm } from 'react-hook-form';
 
-import { configureContext } from '../../App';
 import styles from './configure.module.scss';
+import { configureContext } from '@app/App';
 
 const Configure = () => {
   const history = useHistory();
@@ -26,11 +26,11 @@ const Configure = () => {
     <Container>
       <div className={styles.content}>
         <header className={styles.header}>
-          <img src={process.env.PUBLIC_URL + '/logo80.png'} alt="" />
+          <img src={process.env.PUBLIC_URL + '/logo80.png'} alt={'logo'} />
           <h1>Remote web dev tools</h1>
         </header>
 
-        <form autoComplete="off" className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+        <form autoComplete={'off'} className={styles.form} onSubmit={handleSubmit(onSubmit)}>
           <Controller
             control={control}
             name={'host'}
@@ -38,7 +38,7 @@ const Configure = () => {
             as={
               <TextField
                 fullWidth
-                label="Host"
+                label={'Host'}
                 error={fieldsErrors.host}
                 helperText={fieldsErrors.host ? 'Host is required' : null}
                 placeholder={'Input transfer server host'}
@@ -57,7 +57,7 @@ const Configure = () => {
             as={
               <TextField
                 fullWidth
-                label="Port"
+                label={'Port'}
                 placeholder={'Input transfer server port'}
                 style={{ marginBottom: 16 }}
               />
@@ -65,7 +65,7 @@ const Configure = () => {
           />
 
           <div className={styles.buttonItem}>
-            <Button variant="contained" color="primary" type="submit">
+            <Button variant={'contained'} color={'primary'} type={'submit'}>
               Save
             </Button>
           </div>

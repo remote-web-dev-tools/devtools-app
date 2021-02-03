@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Log } from './log.interface';
+import { Log } from '@interfaces/log.interface';
 import ConsoleItem from './console-item';
 import ConsoleToolBar, { ConsoleFilter, SupportLoggerLevel } from './console-tool-bar';
 

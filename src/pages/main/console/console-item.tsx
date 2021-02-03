@@ -1,5 +1,5 @@
 import React from 'react';
-import { Log } from './log.interface';
+import { Log } from '@interfaces/log.interface';
 import dayjs from 'dayjs';
 import JsValueView from '@rwdt/js-value-view';
 import { makeStyles } from '@material-ui/core';

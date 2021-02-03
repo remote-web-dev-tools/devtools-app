@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { ClientId, ServerId } from '../../interfaces/transfer-id.interface';
-import { Log } from './console/log.interface';
+import { ClientId, ServerId } from '@interfaces/transfer-id.interface';
+import { Log } from '@interfaces/log.interface';
 import { fetchClientIds, fetchRemoteData } from './main.services';
 
 export const useClientIds = () => {
