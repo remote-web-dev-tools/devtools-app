@@ -1,23 +1,45 @@
-import { Container } from '@material-ui/core';
+import { Container, makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Controller, useForm } from 'react-hook-form';
 
-import styles from './configure.module.scss';
-import { configureContext } from '@app/App';
+import { ConfigContext } from '@app/App';
+import { ConfigureInterface } from '@interfaces/configure.interface';
+
+const useStyles = makeStyles({
+  header: {
+    display: 'flex',
+    marginBottom: 36,
+  },
+  content: {
+    height: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  form: {
+    width: 400,
+  },
+  buttonItem: {
+    display: 'flex',
+    marginTop: 24,
+    justifyContent: 'flex-end',
+  },
+});
 
 const Configure = () => {
   const history = useHistory();
-  const { saveConfigure } = useContext(configureContext);
-  const { control, handleSubmit, errors: fieldsErrors } = useForm();
+  const styles = useStyles();
 
-  const onSubmit = (data: any) => {
-    saveConfigure({
-      host: data.host,
-      port: data.port || '',
-    });
+  const { saveConfigure } = useContext(ConfigContext);
+  const { control, handleSubmit, errors: fieldsErrors } = useForm<ConfigureInterface>();
+
+  const onSubmit = (data: ConfigureInterface) => {
+    /* TODO: 保存数据 */
+    // saveConfigure({});
 
     history.push('/');
   };
@@ -33,15 +55,15 @@ const Configure = () => {
         <form autoComplete={'off'} className={styles.form} onSubmit={handleSubmit(onSubmit)}>
           <Controller
             control={control}
-            name={'host'}
+            name={'transferServerUrl'}
             defaultValue={''}
             as={
               <TextField
                 fullWidth
-                label={'Host'}
-                error={fieldsErrors.host}
-                helperText={fieldsErrors.host ? 'Host is required' : null}
-                placeholder={'Input transfer server host'}
+                label={'Transfer Server URL'}
+                error={!!fieldsErrors.transferServerUrl}
+                helperText={fieldsErrors.transferServerUrl ? 'Host is required' : null}
+                placeholder={'Input transfer server url'}
                 style={{ marginBottom: 16 }}
               />
             }
@@ -51,16 +73,11 @@ const Configure = () => {
           />
 
           <Controller
-            name={'port'}
+            name={'viewId'}
             control={control}
             defaultValue={''}
             as={
-              <TextField
-                fullWidth
-                label={'Port'}
-                placeholder={'Input transfer server port'}
-                style={{ marginBottom: 16 }}
-              />
+              <TextField fullWidth label={'View Id'} placeholder={'Input your view id'} style={{ marginBottom: 16 }} />
             }
           />
 
