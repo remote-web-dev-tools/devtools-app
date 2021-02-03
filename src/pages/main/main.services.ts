@@ -7,5 +7,5 @@ export const fetchClientIds = (): Promise<{ serverId: string; clientIds: ClientI
 };
 
 export const fetchRemoteData = (serverId: ServerId, clientId: ClientId): Promise<LoggingEvent[]> => {
-  return request(`/api/transfer/data/${serverId}/${clientId}`).then((res) => res.data);
+  return request(`/api/transfer/data/${serverId}/${clientId}`);
 };

@@ -8,8 +8,7 @@ let timeoutHandle: NodeJS.Timeout;
 let logQueue: LoggingEvent[] = [];
 
 function sendLog() {
-  // const host = process.env.NODE_ENV === 'development' ? 'http://30.10.60.253:4000' : 'https://ffin.alibaba-inc.com';
-  const host = 'http://localhost:6001';
+  const host = 'http://localhost:4000';
 
   fetch(`${host}/api/transfer/upload`, {
     body: JSON.stringify({
