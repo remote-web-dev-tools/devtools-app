@@ -1,5 +1,3 @@
-import { logger } from './logger';
-
 export interface RequestOptions {
   method?: 'GET' | 'POST';
   data?: Record<string, any>;
