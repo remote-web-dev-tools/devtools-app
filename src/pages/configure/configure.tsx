@@ -65,13 +65,17 @@ const Configure = () => {
                 fullWidth
                 label={'Transfer Server URL'}
                 error={!!fieldsErrors.transferServerUrl}
-                helperText={fieldsErrors.transferServerUrl ? 'Host is required' : null}
+                helperText={fieldsErrors.transferServerUrl ? fieldsErrors.transferServerUrl.message : null}
                 placeholder={'Input transfer server url'}
                 style={{ marginBottom: 16 }}
               />
             }
             rules={{
-              required: true,
+              required: { value: true, message: 'Must be required' },
+              pattern: {
+                message: 'Must be an url',
+                value: /^((ht|f)tps?:\/\/)?[\w-]+(\.[\w-]+)+(:\d{1,5})?\/?$/,
+              },
             }}
           />
 
