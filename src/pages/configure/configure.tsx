@@ -37,10 +37,8 @@ const Configure = () => {
   const { saveConfigure } = useContext(ConfigContext);
   const { control, handleSubmit, errors: fieldsErrors } = useForm<ConfigureInterface>();
 
-  const onSubmit = (data: ConfigureInterface) => {
-    /* TODO: 保存数据 */
-    // saveConfigure({});
-
+  const onSubmit = (data: Required<ConfigureInterface>) => {
+    saveConfigure(data);
     history.push('/');
   };
 
@@ -73,11 +71,16 @@ const Configure = () => {
           />
 
           <Controller
-            name={'viewId'}
+            name={'subjectId'}
             control={control}
             defaultValue={''}
             as={
-              <TextField fullWidth label={'View Id'} placeholder={'Input your view id'} style={{ marginBottom: 16 }} />
+              <TextField
+                fullWidth
+                label={'Subject Id'}
+                placeholder={'Input your subject id'}
+                style={{ marginBottom: 16 }}
+              />
             }
           />
 

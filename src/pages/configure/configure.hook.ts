@@ -1,24 +1,39 @@
-import { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import { ConfigureInterface } from '@interfaces/configure.interface';
 
+const getSubjectIdFromUrl = (): string => {
+  const url = new URL(window.location.href);
+
+  return url.searchParams.get('subjectId') || '';
+};
+
 export const useConfigure = () => {
-  const [configure, setConfigure] = useState<ConfigureInterface>({ transferServerUrl: '' });
-  const [needConfigure, setNeedConfigure] = useState(false);
+  const subjectIdFromUrlRef = React.useRef(getSubjectIdFromUrl());
 
-  useEffect(() => {
-    const host = localStorage.getItem('host') || '';
-    const port = localStorage.getItem('port') || '';
+  const [configure, setConfigure] = React.useState<ConfigureInterface>({
+    transferServerUrl: '',
+    subjectId: subjectIdFromUrlRef.current,
+  });
+  const [needConfigure, setNeedConfigure] = React.useState(false);
 
-    // setConfigure({});
-    setNeedConfigure(!host);
+  React.useEffect(() => {
+    const transferServerUrl = localStorage.getItem('transferServerUrl') || '';
+    const subjectId = subjectIdFromUrlRef.current || localStorage.getItem('subjectId') || '';
+
+    setConfigure({
+      subjectId,
+      transferServerUrl,
+    });
+
+    setNeedConfigure(!transferServerUrl);
   }, []);
 
-  const saveConfigure = useCallback((configure: ConfigureInterface) => {
-    // localStorage.setItem('host', configure.host);
-    // localStorage.setItem('port', configure.port || '');
+  const saveConfigure = React.useCallback((configure: Required<ConfigureInterface>) => {
+    localStorage.setItem('transferServerUrl', configure.transferServerUrl);
+    localStorage.setItem('subjectId', configure.subjectId);
 
     setConfigure(configure);
-    // setNeedConfigure(!configure.host);
+    setNeedConfigure(!configure.transferServerUrl);
   }, []);
 
   return {

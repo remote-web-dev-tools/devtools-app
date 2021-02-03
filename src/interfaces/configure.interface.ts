@@ -1,4 +1,11 @@
 export interface ConfigureInterface {
+  /**
+   * Transfer server url
+   */
   transferServerUrl: string;
-  viewId?: string;
+
+  /**
+   * Subject id, default is ip
+   */
+  subjectId?: string;
 }

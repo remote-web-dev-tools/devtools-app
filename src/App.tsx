@@ -10,7 +10,7 @@ import Main from './pages/main/main';
 
 export const ConfigContext = createContext<{
   configure: ConfigureInterface;
-  saveConfigure: (configure: ConfigureInterface) => void;
+  saveConfigure: (configure: Required<ConfigureInterface>) => void;
 }>({
   configure: { transferServerUrl: '' },
   saveConfigure: () => {},
