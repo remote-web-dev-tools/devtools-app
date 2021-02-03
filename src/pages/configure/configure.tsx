@@ -1,7 +1,7 @@
 import { Container, makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -34,13 +34,18 @@ const Configure = () => {
   const history = useHistory();
   const styles = useStyles();
 
-  const { saveConfigure } = useContext(ConfigContext);
-  const { control, handleSubmit, errors: fieldsErrors } = useForm<ConfigureInterface>();
+  const { saveConfigure, configure } = useContext(ConfigContext);
+  const { control, handleSubmit, errors: fieldsErrors, setValue } = useForm<ConfigureInterface>();
 
   const onSubmit = (data: Required<ConfigureInterface>) => {
     saveConfigure(data);
     history.push('/');
   };
+
+  useEffect(() => {
+    setValue('transferServerUrl', configure.transferServerUrl);
+    setValue('subjectId', configure.subjectId);
+  }, [configure]);
 
   return (
     <Container>
