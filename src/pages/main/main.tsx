@@ -1,5 +1,17 @@
-import { AppBar, Button, makeStyles, Menu, MenuItem, Tab, Tabs, Toolbar, Typography } from '@material-ui/core';
+import {
+  AppBar,
+  Button,
+  IconButton,
+  makeStyles,
+  Menu,
+  MenuItem,
+  Tab,
+  Tabs,
+  Toolbar,
+  Typography,
+} from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import SettingsIcon from '@material-ui/icons/Settings';
 import React from 'react';
 import { Redirect, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
@@ -9,21 +21,23 @@ import Network from './network/network';
 
 import { useClientIds, useFetchData } from './main.hooks';
 
-const useStyles = makeStyles({
-  main: {
-    height: 'calc(100vh - 64px)',
-    overflow: 'hidden',
-    display: 'flex',
-    paddingTop: 64,
-  },
-  title: {
-    flexGrow: 1,
-  },
-  container: {
-    display: 'flex',
-    flexGrow: 1,
-    flexDirection: 'column',
-  },
+const useStyles = makeStyles((theme) => {
+  return {
+    main: {
+      height: 'calc(100vh - 64px)',
+      overflow: 'hidden',
+      display: 'flex',
+      paddingTop: 64,
+    },
+    title: {
+      flexGrow: 1,
+    },
+    container: {
+      display: 'flex',
+      flexGrow: 1,
+      flexDirection: 'column',
+    },
+  };
 });
 
 const routes = [
@@ -64,12 +78,13 @@ const Main = () => {
           </Typography>
 
           <Button
+            disabled={clientIds.length === 0}
+            style={{ color: '#fff' }}
             aria-haspopup="true"
             size={'large'}
             onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
               setAnchorEl(event.currentTarget);
             }}
-            style={{ color: '#fff' }}
           >
             {selectedClientId ? (
               <>
@@ -100,6 +115,16 @@ const Main = () => {
               </MenuItem>
             ))}
           </Menu>
+
+          <IconButton
+            edge="end"
+            color="inherit"
+            onClick={() => {
+              history.push('/configure');
+            }}
+          >
+            <SettingsIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
 
