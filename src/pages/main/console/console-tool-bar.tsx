@@ -1,6 +1,6 @@
 import React from 'react';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import { Box, makeStyles, Switch, Typography, withStyles } from '@material-ui/core';
+import { Box, makeStyles, Typography, withStyles, Checkbox, FormGroup, FormControlLabel } from '@material-ui/core';
 import { LoggerLevel } from '@rwdt/logger';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
@@ -10,6 +10,7 @@ export type SupportLoggerLevel = Exclude<LoggerLevel, 'ALL' | 'OFF'>;
 export interface ConsoleFilter {
   showLogLevel: SupportLoggerLevel[];
   showTimestamps: boolean;
+  // preserveLog: boolean;
 }
 
 export interface ConsoleToolBarProps {
@@ -29,7 +30,7 @@ const useStyles = makeStyles(() => {
       width: 1,
       height: 16,
       backgroundColor: '#a3a3a3',
-      margin: '0 8px',
+      margin: '0 8px 0 2px',
     },
   };
 });
@@ -47,22 +48,41 @@ const ConsoleToolBar = (props: ConsoleToolBarProps) => {
 
   return (
     <Box display={'flex'} flexDirection={'row'} alignItems={'center'} className={styles.topBar}>
-      <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
-        <Typography style={{ marginRight: 8 }}>Show Timestamps</Typography>
-        <Switch
-          checked={filter.showTimestamps}
-          onChange={(event, checked) => {
-            onChangeFilter({
-              ...filter,
-              showTimestamps: checked,
-            });
-          }}
-          size={'small'}
+      <FormGroup row>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={filter.showTimestamps}
+              onChange={(event, checked) => {
+                onChangeFilter({
+                  ...filter,
+                  showTimestamps: checked,
+                });
+              }}
+              size={'small'}
+            />
+          }
+          label={'Show Timestamps'}
         />
-      </Box>
+        {/*<FormControlLabel*/}
+        {/*  control={*/}
+        {/*    <Checkbox*/}
+        {/*      checked={filter.preserveLog}*/}
+        {/*      onChange={(event, checked) => {*/}
+        {/*        onChangeFilter({*/}
+        {/*          ...filter,*/}
+        {/*          preserveLog: checked,*/}
+        {/*        });*/}
+        {/*      }}*/}
+        {/*      size={'small'}*/}
+        {/*    />*/}
+        {/*  }*/}
+        {/*  label={'Preserve Log'}*/}
+        {/*/>*/}
+      </FormGroup>
       <div className={styles.divider} />
       <Box display={'flex'} flexDirection={'row'} alignItems={'center'} flexGrow={1}>
-        <Typography style={{ marginRight: 8, marginLeft: 4 }}>Select logger level</Typography>
+        <Typography style={{ marginRight: 12, marginLeft: 4 }}>Select logger level</Typography>
 
         <ToggleButtonGroup
           size={'small'}

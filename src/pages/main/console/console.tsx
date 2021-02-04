@@ -18,6 +18,7 @@ const Console = React.memo(
     const [filter, setFilter] = React.useState<ConsoleFilter>({
       showLogLevel: ['INFO', 'WARN', 'ERROR'],
       showTimestamps: true,
+      // preserveLog: false,
     });
 
     const handleChangeFilter = (filter: ConsoleFilter) => {
