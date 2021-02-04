@@ -4,10 +4,13 @@ export interface RequestOptions {
 }
 
 function getApi(url: string): string {
-  let host = localStorage.getItem('host') as string;
-  let port = localStorage.getItem('port') as string;
+  let host = localStorage.getItem('transferServerUrl') as string;
 
-  return host + (port ? `:${port}` : '') + url;
+  if (host.endsWith('/')) {
+    host = host.substring(0, host.length - 1);
+  }
+
+  return host + url;
 }
 
 export const request = (url: string, options: RequestOptions = {}) => {
