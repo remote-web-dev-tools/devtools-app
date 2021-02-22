@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import SettingsIcon from '@material-ui/icons/Settings';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Redirect, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Console from './console/console';
@@ -20,6 +20,7 @@ import EventTracking from './event-tracking/event-tracking';
 import Network from './network/network';
 
 import { useClientIds, useFetchData } from './main.hooks';
+import { ConfigContext } from '@app/App';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -62,8 +63,11 @@ const Main = () => {
   const classes = useStyles();
   const { path, url } = useRouteMatch();
   const history = useHistory();
+  const configContext = useContext(ConfigContext);
 
-  const { serverId, clientIds, selectedClientId, setSelectedClientId } = useClientIds();
+  const { serverId, clientIds, selectedClientId, setSelectedClientId } = useClientIds(
+    configContext.configure.subjectId || ''
+  );
   const { logs, clearLogs } = useFetchData(serverId, selectedClientId);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

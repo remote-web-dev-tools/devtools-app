@@ -3,13 +3,13 @@ import { ClientId, ServerId } from '@interfaces/transfer-id.interface';
 import { Log } from '@interfaces/log.interface';
 import { fetchClientIds, fetchRemoteData } from './main.services';
 
-export const useClientIds = () => {
+export const useClientIds = (subjectId: string) => {
   const [clientIds, setClientIds] = React.useState<ClientId[]>([]);
   const [serverId, setServerId] = React.useState<ServerId>('');
   const [selectedClientId, setSelectedClientId] = React.useState('');
 
   React.useEffect(() => {
-    fetchClientIds().then(({ serverId, clientIds }) => {
+    fetchClientIds(subjectId).then(({ serverId, clientIds }) => {
       setClientIds(clientIds);
       setServerId(serverId);
 
@@ -17,7 +17,7 @@ export const useClientIds = () => {
         setSelectedClientId(clientIds[0]);
       }
     });
-  }, []);
+  }, [subjectId]);
 
   return { clientIds, serverId, selectedClientId, setSelectedClientId };
 };
