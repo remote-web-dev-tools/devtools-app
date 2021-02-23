@@ -1,4 +1,4 @@
-import { AppBar, IconButton, makeStyles, Tab, Tabs, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, IconButton, makeStyles, Snackbar, Tab, Tabs, Toolbar, Typography } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
 import React, { useContext } from 'react';
 import { Redirect, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
@@ -9,6 +9,7 @@ import Network from './network/network';
 
 import { useFetchData } from './main.hooks';
 import { ConfigContext } from '@app/App';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -78,7 +79,6 @@ const Main = () => {
           </IconButton>
         </Toolbar>
       </AppBar>
-
       <div className={classes.container}>
         <Tabs
           value={tabIndex}
@@ -123,6 +123,12 @@ const Main = () => {
           </Route>
         </Switch>
       </div>
+      <Snackbar open={true} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+        <Alert severity="error">
+          <AlertTitle>Error</AlertTitle>
+          Please set <strong>client id!</strong>
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
