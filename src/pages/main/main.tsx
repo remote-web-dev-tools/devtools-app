@@ -123,7 +123,7 @@ const Main = () => {
           </Route>
         </Switch>
       </div>
-      <Snackbar open={true} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+      <Snackbar open={!clientId} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
         <Alert severity="error">
           <AlertTitle>Error</AlertTitle>
           Please set <strong>client id!</strong>
