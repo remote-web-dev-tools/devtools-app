@@ -7,5 +7,5 @@ export interface ConfigureInterface {
   /**
    * Subject id, default is ip
    */
-  subjectId?: string;
+  clientId: string;
 }

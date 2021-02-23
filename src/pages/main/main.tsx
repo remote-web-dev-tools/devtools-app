@@ -1,16 +1,4 @@
-import {
-  AppBar,
-  Button,
-  IconButton,
-  makeStyles,
-  Menu,
-  MenuItem,
-  Tab,
-  Tabs,
-  Toolbar,
-  Typography,
-} from '@material-ui/core';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import { AppBar, IconButton, makeStyles, Tab, Tabs, Toolbar, Typography } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
 import React, { useContext } from 'react';
 import { Redirect, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
@@ -19,7 +7,7 @@ import Console from './console/console';
 import EventTracking from './event-tracking/event-tracking';
 import Network from './network/network';
 
-import { useClientIds, useFetchData } from './main.hooks';
+import { useFetchData } from './main.hooks';
 import { ConfigContext } from '@app/App';
 
 const useStyles = makeStyles((theme) => {
@@ -63,14 +51,12 @@ const Main = () => {
   const classes = useStyles();
   const { path, url } = useRouteMatch();
   const history = useHistory();
-  const configContext = useContext(ConfigContext);
+  const {
+    configure: { clientId },
+  } = useContext(ConfigContext);
 
-  const { serverId, clientIds, selectedClientId, setSelectedClientId } = useClientIds(
-    configContext.configure.subjectId || ''
-  );
-  const { logs, clearLogs } = useFetchData(serverId, selectedClientId);
+  const { logs, clearLogs } = useFetchData(clientId);
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [tabIndex, setTabIndex] = React.useState(0);
 
   return (
@@ -80,45 +66,6 @@ const Main = () => {
           <Typography variant="h6" className={classes.title}>
             Remote Dev Tools
           </Typography>
-
-          <Button
-            disabled={clientIds.length === 0}
-            style={{ color: '#fff' }}
-            aria-haspopup="true"
-            size={'large'}
-            onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-              setAnchorEl(event.currentTarget);
-            }}
-          >
-            {selectedClientId ? (
-              <>
-                {selectedClientId} <ArrowDropDownIcon style={{ marginLeft: 8 }} />
-              </>
-            ) : (
-              'No Client'
-            )}
-          </Button>
-          <Menu
-            id="simple-menu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={() => {
-              setAnchorEl(null);
-            }}
-          >
-            {clientIds.map((value, index) => (
-              <MenuItem
-                key={index}
-                onClick={() => {
-                  setSelectedClientId(value);
-                  setAnchorEl(null);
-                }}
-              >
-                {value}
-              </MenuItem>
-            ))}
-          </Menu>
 
           <IconButton
             edge="end"

@@ -1,11 +1,11 @@
 import { LoggingEvent } from '@rwdt/logger';
-import { ClientId, ServerId } from '@interfaces/transfer-id.interface';
+import { ClientId } from '@interfaces/transfer-id.interface';
 import { request } from '@utils/request';
 
 export const fetchClientIds = (subjectId: string): Promise<{ serverId: string; clientIds: ClientId[] }> => {
   return request('/api/transfer/client-ids' + (subjectId ? `/${subjectId}` : ''));
 };
 
-export const fetchRemoteData = (serverId: ServerId, clientId: ClientId): Promise<LoggingEvent[]> => {
-  return request(`/api/transfer/data/${serverId}/${clientId}`);
+export const fetchRemoteData = (clientId: ClientId): Promise<LoggingEvent[]> => {
+  return request(`/api/transfer/data/${clientId}`);
 };

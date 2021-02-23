@@ -12,7 +12,7 @@ export const ConfigContext = createContext<{
   configure: ConfigureInterface;
   saveConfigure: (configure: Required<ConfigureInterface>) => void;
 }>({
-  configure: { transferServerUrl: '' },
+  configure: { transferServerUrl: '', clientId: '' },
   saveConfigure: () => {},
 });
 

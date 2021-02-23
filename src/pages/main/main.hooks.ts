@@ -1,26 +1,7 @@
 import React, { useEffect } from 'react';
-import { ClientId, ServerId } from '@interfaces/transfer-id.interface';
+import { ClientId } from '@interfaces/transfer-id.interface';
 import { Log } from '@interfaces/log.interface';
-import { fetchClientIds, fetchRemoteData } from './main.services';
-
-export const useClientIds = (subjectId: string) => {
-  const [clientIds, setClientIds] = React.useState<ClientId[]>([]);
-  const [serverId, setServerId] = React.useState<ServerId>('');
-  const [selectedClientId, setSelectedClientId] = React.useState('');
-
-  React.useEffect(() => {
-    fetchClientIds(subjectId).then(({ serverId, clientIds }) => {
-      setClientIds(clientIds);
-      setServerId(serverId);
-
-      if (clientIds.length > 0) {
-        setSelectedClientId(clientIds[0]);
-      }
-    });
-  }, [subjectId]);
-
-  return { clientIds, serverId, selectedClientId, setSelectedClientId };
-};
+import { fetchRemoteData } from './main.services';
 
 const MAX_LOG_LENGTH = 5000;
 let key_index = 1;
@@ -42,13 +23,13 @@ const appendData = <T, R = T & { key: number }>(preState: R[], nextState: T[]): 
   }
 };
 
-export const useFetchData = (serverId: ServerId, clientId: ClientId) => {
+export const useFetchData = (clientId: ClientId) => {
   const [logs, setLogs] = React.useState<Log[]>([]);
 
   const timerRef = React.useRef<NodeJS.Timeout>();
 
   const timeFn = React.useCallback(() => {
-    fetchRemoteData(serverId, clientId)
+    fetchRemoteData(clientId)
       .then((loggingEvents) => {
         setLogs((prevState) => appendData(prevState, loggingEvents));
       })
@@ -57,10 +38,10 @@ export const useFetchData = (serverId: ServerId, clientId: ClientId) => {
           timeFn();
         }, 1000);
       });
-  }, [serverId, clientId]);
+  }, [clientId]);
 
   useEffect(() => {
-    if (!(serverId && clientId)) {
+    if (!clientId) {
       return;
     }
 
@@ -72,11 +53,7 @@ export const useFetchData = (serverId: ServerId, clientId: ClientId) => {
         clearTimeout(timerRef.current);
       }
     };
-  }, [serverId, clientId, timeFn]);
-
-  useEffect(() => {
-    /* TODO: 处理切换 client */
-  }, [clientId]);
+  }, [clientId, timeFn]);
 
   const clearLogs = React.useCallback(() => {
     setLogs([]);

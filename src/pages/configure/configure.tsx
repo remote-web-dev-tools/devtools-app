@@ -35,7 +35,9 @@ const Configure = () => {
   const styles = useStyles();
 
   const { saveConfigure, configure } = useContext(ConfigContext);
-  const { control, handleSubmit, errors: fieldsErrors, setValue } = useForm<ConfigureInterface>();
+  const { control, handleSubmit, errors: fieldsErrors, setValue } = useForm<
+    Pick<ConfigureInterface, 'transferServerUrl'>
+  >();
 
   const onSubmit = (data: Required<ConfigureInterface>) => {
     saveConfigure(data);
@@ -44,7 +46,6 @@ const Configure = () => {
 
   useEffect(() => {
     setValue('transferServerUrl', configure.transferServerUrl);
-    setValue('subjectId', configure.subjectId);
   }, [configure]);
 
   return (
@@ -77,20 +78,6 @@ const Configure = () => {
                 value: /^((ht|f)tps?:\/\/)?[\w-]+(\.[\w-]+)+(:\d{1,5})?\/?$/,
               },
             }}
-          />
-
-          <Controller
-            name={'subjectId'}
-            control={control}
-            defaultValue={''}
-            as={
-              <TextField
-                fullWidth
-                label={'Subject Id'}
-                placeholder={'Input your subject id'}
-                style={{ marginBottom: 16 }}
-              />
-            }
           />
 
           <div className={styles.buttonItem}>
