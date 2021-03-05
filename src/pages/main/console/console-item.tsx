@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Log } from '@interfaces/log.interface';
 import dayjs from 'dayjs';
 import JsValueView from '@rwdt/js-value-view';
@@ -69,6 +69,8 @@ const useStyles = makeStyles(({ palette }) => {
 const ConsoleItem = React.memo(
   ({ log, filter: { showTimestamps } }: ConsoleItemProps) => {
     const styles = useStyles();
+
+    useEffect(() => log && console.log(log), [log]);
 
     return (
       <div className={styles.item}>
